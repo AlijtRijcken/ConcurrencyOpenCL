@@ -5,6 +5,7 @@ __kernel void device_function(__global uint* second)
 	uint x = get_global_id(0) + 1;
 	uint y = get_global_id(1) + 1;
 	uint id = (512 * 512) + y * 512 + (x >> 5);
+	//printf("%u", second[y + 512 * x]);
 	uint pattern = 0;
 
 	// count active neighbors
@@ -15,6 +16,7 @@ __kernel void device_function(__global uint* second)
 		pattern = 1;
 
 	second[id] = pattern;
+
 }
 
 // helper function for setting one bit in the pattern buffer

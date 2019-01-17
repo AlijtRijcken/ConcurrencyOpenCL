@@ -75,7 +75,11 @@ namespace Template
                     }
             }
             // swap buffers
-            for (int i = 0; i < pw * ph; i++) second[i] = pattern[i];
+            for (int i = 0; i < pw * ph; i++)
+            {
+                second[i] = pattern[i];
+                Console.WriteLine(second[i]); 
+            }
 
             Sbuffer = new OpenCLBuffer<uint>(ocl, second);
             kernel.SetArgument(0, Sbuffer);
@@ -96,7 +100,10 @@ namespace Template
             Sbuffer.CopyFromDevice();
 
             for (uint i = 0; i < (second.Length / 2); i++)
+            {
+                //Console.WriteLine(second[i]); 
                 second[i] = second[i + second.Length / 2];
+            }
 
             // visualize current state, DRAW FUNCTION -> GPU BONUS. 
             screen.Clear(0);
