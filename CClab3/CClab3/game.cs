@@ -60,7 +60,7 @@ namespace Template
                     pw = (UInt32.Parse(sub[1]) + 31) / 32;
                     ph = UInt32.Parse(sub[3]);
                     pattern = new uint[pw * ph];
-                    second = new uint[pw * ph];
+                    second = new uint[pw * ph * 2];
                 }
                 else while (pos < line.Length)
                     {
@@ -76,6 +76,7 @@ namespace Template
             }
             // swap buffers
             for (int i = 0; i < pw * ph; i++) second[i] = pattern[i];
+
             Sbuffer = new OpenCLBuffer<uint>(ocl, second);
             kernel.SetArgument(0, Sbuffer);
             
@@ -93,6 +94,9 @@ namespace Template
             Sbuffer.CopyToDevice();
             kernel.Execute(workSize);
             Sbuffer.CopyFromDevice();
+
+            for (uint i = 0; i < (second.Length / 2); i++)
+                second[i] = second[i + second.Length / 2];
 
             // visualize current state, DRAW FUNCTION -> GPU BONUS. 
             screen.Clear(0);
