@@ -17,7 +17,7 @@ namespace Template
         // find the kernel named 'device_function' in the program
         OpenCLKernel kernel = new OpenCLKernel(ocl, "device_function");
         // create a regular buffer; by default this resides on both the host and the device
-        OpenCLBuffer<uint> Sbuffer;
+        OpenCLBuffer<uint> Sbuffer, Pbuffer;
 
         //COPYED FROM CPU VERSION
         // screen surface to draw to
@@ -41,7 +41,6 @@ namespace Template
         {
             StreamReader sr = new StreamReader("../../samples/turing_js_r.rle");
             uint state = 0, n = 0, x = 0, y = 0;
-            workSize[0] = screen.width; workSize[1] = screen.height;
             while (true)
             {
                 String line = sr.ReadLine();
@@ -55,6 +54,7 @@ namespace Template
                     ph = UInt32.Parse(sub[3]);
                     pattern = new uint[pw * ph];
                     second = new uint[pw * ph];
+                    workSize[0] = pw * 32; workSize[1] = ph;
                 }
                 else while (pos < line.Length)
                     {
@@ -72,11 +72,15 @@ namespace Template
             for (int i = 0; i < pw * ph; i++) second[i] = pattern[i];
 
             Sbuffer = new OpenCLBuffer<uint>(ocl, second);
+            Pbuffer = new OpenCLBuffer<uint>(ocl, pattern);
+            Sbuffer.CopyToDevice();
             kernel.SetArgument(0, Sbuffer);
+            kernel.SetArgument(1, Pbuffer);
+            kernel.SetArgument(2, pw);
+
 
             //informatie doorgeven naar de GPU - hele dure operatie. Je kan gaan files loaden op de GPU
             //Kopier de begin state één keer naar de GPU en daarna ga je de array's aanpassen. 
-            
         }
 
 
@@ -88,7 +92,13 @@ namespace Template
             //Simulate();
             Sbuffer.CopyToDevice();
             kernel.Execute(workSize);
-            Sbuffer.CopyFromDevice();
+            Pbuffer.CopyFromDevice();
+
+            for (int i = 0; i < second.Length; i++)
+            {
+                second[i] = pattern[i];
+                
+            }
 
             // visualize current state, DRAW FUNCTION -> GPU BONUS. 
             screen.Clear(0);
