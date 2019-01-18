@@ -13,7 +13,6 @@ __kernel void device_function(__global uint* _in, __global uint* _out, uint pw)
     if ((GetBit(x, y, pw, _in) == 1 && n == 2) || n == 3)
 	{
 		_out[y * pw + (x >> 5)] |= 1U << (int)(x & 31);
-		//printf("%u \n", pattern[y * pw + (x >> 5)]);
 	}
 }
 
