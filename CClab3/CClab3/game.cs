@@ -17,7 +17,7 @@ namespace Template
         // find the kernel named 'device_function' in the program
         OpenCLKernel kernel = new OpenCLKernel(ocl, "device_function");
         // create a regular buffer; by default this resides on both the host and the device
-        OpenCLBuffer<uint> Sbuffer, Pbuffer;
+        OpenCLBuffer<uint> inBuffer, outBuffer;
 
         //COPYED FROM CPU VERSION
         // screen surface to draw to
@@ -26,8 +26,8 @@ namespace Template
         Stopwatch timer = new Stopwatch();
         int generation = 0;
         // two buffers for the pattern: simulate reads 'second', writes to 'pattern'
-        static uint[] pattern;
-        static uint[] second;
+        static uint[] _in;
+        static uint[] _out;
         uint pw, ph; // note: pw is in uints; width in bits is 32 this value.
         long[] workSize = { 0, 0 };
 
@@ -52,8 +52,8 @@ namespace Template
                     String[] sub = line.Split(new char[] { '=', ',' }, StringSplitOptions.RemoveEmptyEntries);
                     pw = (UInt32.Parse(sub[1]) + 31) / 32;
                     ph = UInt32.Parse(sub[3]);
-                    pattern = new uint[pw * ph];
-                    second = new uint[pw * ph];
+                    _in = new uint[pw * ph];
+                    _out = new uint[pw * ph];
                     workSize[0] = pw * 32; workSize[1] = ph;
                 }
                 else while (pos < line.Length)
@@ -68,17 +68,12 @@ namespace Template
                         }
                     }
             }
-            // swap buffers
-            for (int i = 0; i < pw * ph; i++) second[i] = pattern[i];
+            inBuffer = new OpenCLBuffer<uint>(ocl, _in);
+            outBuffer = new OpenCLBuffer<uint>(ocl, _out);
 
-            Sbuffer = new OpenCLBuffer<uint>(ocl, second);
-            Pbuffer = new OpenCLBuffer<uint>(ocl, pattern);
-            Sbuffer.CopyToDevice();
-            kernel.SetArgument(0, Sbuffer);
-            kernel.SetArgument(1, Pbuffer);
+            kernel.SetArgument(0, inBuffer);
+            kernel.SetArgument(1, outBuffer);
             kernel.SetArgument(2, pw);
-
-
             //informatie doorgeven naar de GPU - hele dure operatie. Je kan gaan files loaden op de GPU
             //Kopier de begin state één keer naar de GPU en daarna ga je de array's aanpassen. 
         }
@@ -89,59 +84,34 @@ namespace Template
             // start timer
             timer.Restart();
             // run the simulation, 1 step
-            //Simulate();
-            Sbuffer.CopyToDevice();
+            
+            inBuffer.CopyToDevice();
             kernel.Execute(workSize);
-            Pbuffer.CopyFromDevice();
-
-            for (int i = 0; i < second.Length; i++)
-            {
-                second[i] = pattern[i];
-                
-            }
+            outBuffer.CopyFromDevice();
 
             // visualize current state, DRAW FUNCTION -> GPU BONUS. 
             screen.Clear(0);
             for (uint y = 0; y < screen.height; y++)
                 for (uint x = 0; x < screen.width; x++)
-                    if (GetBit(x + xoffset, y + yoffset) == 1) screen.Plot(x, y, 0xffffff);
+                    if (GetBit(x + xoffset, y + yoffset) == 1)
+                    {
+                        screen.Plot(x, y, 0xffffff);
+                        BitSet(x, y);
+                    }
             // report performance
             Console.WriteLine("generation " + generation++ + ": " + timer.ElapsedMilliseconds + "ms");
-
-
         }
 
         // helper function for setting one bit in the pattern buffer
         void BitSet(uint x, uint y)
         {
-            pattern[y * pw + (x >> 5)] |= 1U << (int)(x & 31);
+            _in[y * pw + (x >> 5)] |= 1U << (int)(x & 31);
         }
         // helper function for getting one bit from the secondary pattern buffer
         uint GetBit(uint x, uint y)
         {
-            return (second[y * pw + (x >> 5)] >> (int)(x & 31)) & 1U;
+            return (_out[y * pw + (x >> 5)] >> (int)(x & 31)) & 1U;
         }
-
-        // SIMULATE --> OpenCL Class ALLE BEREKENINGEN MOETEN NAAR DE GPU.
-        // Takes the pattern in array 'second', and applies the rules of Game of Life to produce the next state
-        // in array 'pattern'. At the end, the result is copied back to 'second' for the next generation.
-        //void Simulate()
-        //{
-        //    // clear destination pattern
-        //    for (int i = 0; i < pw * ph; i++) pattern[i] = 0;
-        //    // process all pixels, skipping one pixel boundary
-        //    uint w = pw * 32, h = ph;
-        //    for (uint y = 1; y < h - 1; y++) for (uint x = 1; x < w - 1; x++)
-        //        {
-        //            // count active neighbors
-        //            uint n = GetBit(x - 1, y - 1) + GetBit(x, y - 1) + GetBit(x + 1, y - 1) + GetBit(x - 1, y) +
-        //                GetBit(x + 1, y) + GetBit(x - 1, y + 1) + GetBit(x, y + 1) + GetBit(x + 1, y + 1);
-        //            if ((GetBit(x, y) == 1 && n == 2) || n == 3) BitSet(x, y);
-        //        }
-        //    // swap buffers
-        //    for (int i = 0; i < pw * ph; i++) second[i] = pattern[i];
-        //}
-
 
         //COPYED FROM CPU VERSION
         public void SetMouseState(int x, int y, bool pressed)
