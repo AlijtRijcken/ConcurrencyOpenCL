@@ -12,7 +12,7 @@ __kernel void device_function(__global uint* _in, __global uint* _out, uint pw)
     GetBit(x + 1, y, pw, _in) + GetBit(x - 1, y + 1, pw, _in) + GetBit(x, y + 1, pw, _in) + GetBit(x + 1, y + 1, pw, _in);
     if ((GetBit(x, y, pw, _in) == 1 && n == 2) || n == 3)
 	{
-		_out[y * pw + (x >> 5)] |= 1U << (int)(x & 31);
+		atomic_or(&_out[y * pw + (x >> 5)], 1U << (int)(x & 31));
 	}
 }
 

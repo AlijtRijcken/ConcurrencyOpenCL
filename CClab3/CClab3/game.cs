@@ -39,7 +39,7 @@ namespace Template
 
         public void Init()
         {
-            StreamReader sr = new StreamReader("../../samples/turing_js_r.rle");
+            StreamReader sr = new StreamReader("../../samples/c4-orthogonal.rle");
             uint state = 0, n = 0, x = 0, y = 0;
             while (true)
             {
@@ -68,6 +68,7 @@ namespace Template
                         }
                     }
             }
+
             inBuffer = new OpenCLBuffer<uint>(ocl, _in);
             outBuffer = new OpenCLBuffer<uint>(ocl, _out);
 
@@ -85,9 +86,16 @@ namespace Template
             timer.Restart();
             // run the simulation, 1 step
             
+
             inBuffer.CopyToDevice();
             kernel.Execute(workSize);
             outBuffer.CopyFromDevice();
+
+            
+            for (int i = 0; i < pw * ph; i++)
+            {
+                _in[i] = 0;
+            }
 
             // visualize current state, DRAW FUNCTION -> GPU BONUS. 
             screen.Clear(0);
@@ -96,8 +104,17 @@ namespace Template
                     if (GetBit(x + xoffset, y + yoffset) == 1)
                     {
                         screen.Plot(x, y, 0xffffff);
-                        BitSet(x, y);
+                        
                     }
+
+            uint w = pw * 32, h = ph;
+            for (uint y = 1; y < h - 1; y++) for (uint x = 1; x < w - 1; x++)
+                {
+                    if (GetBit(x, y) == 1)
+                        BitSet(x, y);
+                }
+
+
             // report performance
             Console.WriteLine("generation " + generation++ + ": " + timer.ElapsedMilliseconds + "ms");
         }

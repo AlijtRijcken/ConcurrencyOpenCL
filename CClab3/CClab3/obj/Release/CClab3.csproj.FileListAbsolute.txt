@@ -10,3 +10,15 @@ D:\Doucmenten\Universiteit\Concurrency\ConcurrencyOpenCL\CClab3\CClab3\obj\Relea
 D:\Doucmenten\Universiteit\Concurrency\ConcurrencyOpenCL\CClab3\CClab3\obj\Release\CClab3.csproj.CopyComplete
 D:\Doucmenten\Universiteit\Concurrency\ConcurrencyOpenCL\CClab3\CClab3\obj\Release\CClab3.exe
 D:\Doucmenten\Universiteit\Concurrency\ConcurrencyOpenCL\CClab3\CClab3\obj\Release\CClab3.pdb
+C:\Users\Alijt Rijcken\Documents\GitHub\ConcurrencyOpenCL\CClab3\CClab3\bin\Release\CClab3.exe.config
+C:\Users\Alijt Rijcken\Documents\GitHub\ConcurrencyOpenCL\CClab3\CClab3\bin\Release\CClab3.exe
+C:\Users\Alijt Rijcken\Documents\GitHub\ConcurrencyOpenCL\CClab3\CClab3\bin\Release\CClab3.pdb
+C:\Users\Alijt Rijcken\Documents\GitHub\ConcurrencyOpenCL\CClab3\CClab3\bin\Release\Cloo.clSharp.dll
+C:\Users\Alijt Rijcken\Documents\GitHub\ConcurrencyOpenCL\CClab3\CClab3\bin\Release\OpenTK.dll
+C:\Users\Alijt Rijcken\Documents\GitHub\ConcurrencyOpenCL\CClab3\CClab3\bin\Release\OpenTK.pdb
+C:\Users\Alijt Rijcken\Documents\GitHub\ConcurrencyOpenCL\CClab3\CClab3\bin\Release\OpenTK.xml
+C:\Users\Alijt Rijcken\Documents\GitHub\ConcurrencyOpenCL\CClab3\CClab3\obj\Release\CClab3.csprojAssemblyReference.cache
+C:\Users\Alijt Rijcken\Documents\GitHub\ConcurrencyOpenCL\CClab3\CClab3\obj\Release\CClab3.csproj.CoreCompileInputs.cache
+C:\Users\Alijt Rijcken\Documents\GitHub\ConcurrencyOpenCL\CClab3\CClab3\obj\Release\CClab3.csproj.CopyComplete
+C:\Users\Alijt Rijcken\Documents\GitHub\ConcurrencyOpenCL\CClab3\CClab3\obj\Release\CClab3.exe
+C:\Users\Alijt Rijcken\Documents\GitHub\ConcurrencyOpenCL\CClab3\CClab3\obj\Release\CClab3.pdb
