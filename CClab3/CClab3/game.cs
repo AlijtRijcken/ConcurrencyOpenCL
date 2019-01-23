@@ -39,7 +39,7 @@ namespace Template
 
         public void Init()
         {
-            StreamReader sr = new StreamReader("../../samples/c4-orthogonal.rle");
+            StreamReader sr = new StreamReader("../../samples/turing_js_r.rle");
             uint state = 0, n = 0, x = 0, y = 0;
             while (true)
             {
