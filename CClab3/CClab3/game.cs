@@ -25,7 +25,7 @@ namespace Template
         // stopwatch
         Stopwatch timer = new Stopwatch();
         int generation = 0;
-        // two buffers for the pattern: simulate reads 'second', writes to 'pattern'
+        // two buffers for the pattern: simulate reads '_out', writes to '_in'
         static uint[] _in;
         static uint[] _out;
         uint pw, ph; // note: pw is in uints; width in bits is 32 this value.
@@ -39,7 +39,7 @@ namespace Template
 
         public void Init()
         {
-            StreamReader sr = new StreamReader("../../samples/turing_js_r.rle");
+            StreamReader sr = new StreamReader("C:/Users/Alijt Rijcken/Documents/GitHub/ConcurrencyOpenCL/CClab3/CClab3/samples/c4-orthogonal.rle");
             uint state = 0, n = 0, x = 0, y = 0;
             while (true)
             {
@@ -54,7 +54,8 @@ namespace Template
                     ph = UInt32.Parse(sub[3]);
                     _in = new uint[pw * ph];
                     _out = new uint[pw * ph];
-                    workSize[0] = pw * 32; workSize[1] = ph;
+                    workSize[0] = pw * 32;
+                    workSize[1] = ph;
                 }
                 else while (pos < line.Length)
                     {
@@ -75,6 +76,13 @@ namespace Template
             kernel.SetArgument(0, inBuffer);
             kernel.SetArgument(1, outBuffer);
             kernel.SetArgument(2, pw);
+            kernel.SetArgument(3, ph); 
+
+            BitSet(20, 20);
+            BitSet(21, 20);
+            BitSet(22, 20);
+            BitSet(20, 21);
+            BitSet(21, 22);
             //informatie doorgeven naar de GPU - hele dure operatie. Je kan gaan files loaden op de GPU
             //Kopier de begin state één keer naar de GPU en daarna ga je de array's aanpassen. 
         }
@@ -116,7 +124,7 @@ namespace Template
 
 
             // report performance
-            Console.WriteLine("generation " + generation++ + ": " + timer.ElapsedMilliseconds + "ms");
+            //Console.WriteLine("generation " + generation++ + ": " + timer.ElapsedMilliseconds + "ms");
         }
 
         // helper function for setting one bit in the pattern buffer
@@ -131,6 +139,7 @@ namespace Template
         }
 
         //COPYED FROM CPU VERSION
+        //handles mouse movement
         public void SetMouseState(int x, int y, bool pressed)
         {
             if (pressed)
@@ -151,6 +160,17 @@ namespace Template
                 }
             }
             else lastLButtonState = false;
+        }
+
+        //hij moet de scoller van de mouse meenemen
+        //Console venster gaat niet veranderen, maar de inhoud word groter
+        //maar een pixel blijft een pixel natuurlijk...
+        //--> Template.cs staat de input handler.
+        //Mouse positie geeft aan waarop je uiteindelijk moet inzoomen natuurlijk
+        public void Zoom(int scrolling)
+        {
+
+
         }
     } // class Game
 } // namespace Template

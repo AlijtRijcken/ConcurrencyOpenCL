@@ -62,12 +62,16 @@ namespace Template
         }
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
-            // called once per frame; app logic
+            //UPDATE. called once per frame; app logic
             var keyboard = OpenTK.Input.Keyboard.GetState();
             if (keyboard[OpenTK.Input.Key.Escape]) this.Exit();
             var mouse = OpenTK.Input.Mouse.GetState();
             Point p = CursorPosition.GetCursorPosition();
+            //mouse drag function handling, p.X & p.Y are the current mouse positions. 
             game.SetMouseState(p.X, p.Y, mouse.LeftButton == ButtonState.Pressed);
+            //mouse zoom function, work with the mouse.Scroll
+            game.Zoom(mouse.ScrollWheelValue);        /////////////////////////////////////////////////////////////////////////////////////
+
         }
         protected override void OnRenderFrame(FrameEventArgs e)
         {
