@@ -28,7 +28,7 @@ namespace Template
         // two buffers for the pattern: simulate reads '_out', writes to '_in'
         static uint[] _in;
         static uint[] _out;
-        uint pw, ph; // note: pw is in uints; width in bits is 32 this value.
+        uint pw, ph, breedte; // note: pw is in uints; width in bits is 32 this value.
         long[] workSize = { 0, 0 };
 
         // mouse handling: dragging functionality
@@ -51,6 +51,7 @@ namespace Template
                 {
                     String[] sub = line.Split(new char[] { '=', ',' }, StringSplitOptions.RemoveEmptyEntries);
                     pw = (UInt32.Parse(sub[1]) + 31) / 32;
+                    breedte = (UInt32.Parse(sub[1]));
                     ph = UInt32.Parse(sub[3]);
                     _in = new uint[pw * ph];
                     _out = new uint[pw * ph];
@@ -76,7 +77,8 @@ namespace Template
             kernel.SetArgument(0, inBuffer);
             kernel.SetArgument(1, outBuffer);
             kernel.SetArgument(2, pw);
-            kernel.SetArgument(3, ph); 
+            kernel.SetArgument(3, ph);
+            kernel.SetArgument(4, breedte); 
 
             BitSet(20, 20);
             BitSet(21, 20);
@@ -124,7 +126,7 @@ namespace Template
 
 
             // report performance
-            //Console.WriteLine("generation " + generation++ + ": " + timer.ElapsedMilliseconds + "ms");
+            Console.WriteLine("generation " + generation++ + ": " + timer.ElapsedMilliseconds + "ms");
         }
 
         // helper function for setting one bit in the pattern buffer
