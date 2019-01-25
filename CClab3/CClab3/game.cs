@@ -74,6 +74,8 @@ namespace Template
             inBuffer = new OpenCLBuffer<uint>(ocl, _in);
             outBuffer = new OpenCLBuffer<uint>(ocl, _out);
 
+            Console.WriteLine(_out.Length);
+
             kernel.SetArgument(0, inBuffer);
             kernel.SetArgument(1, outBuffer);
             kernel.SetArgument(2, pw);
@@ -117,7 +119,7 @@ namespace Template
 
 
             // report performance
-            Console.WriteLine("generation " + generation++ + ": " + timer.ElapsedMilliseconds + "ms");
+            //Console.WriteLine("generation " + generation++ + ": " + timer.ElapsedMilliseconds + "ms");
         }
 
         // helper function for setting one bit in the pattern buffer
