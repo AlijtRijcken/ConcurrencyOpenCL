@@ -1,4 +1,3 @@
-uint OutOfBoundGetBit(uint x, uint y, uint pw, uint ph, uint breedte, __global uint* _in_);
 uint GetBit(uint x, uint y, uint pw, __global uint* _in_);
 
 __kernel void device_function(__global uint* _in, __global uint* _out, uint pw, uint ph, uint breedte)

@@ -39,7 +39,7 @@ namespace Template
 
         public void Init()
         {
-            StreamReader sr = new StreamReader("C:/Users/Alijt Rijcken/Documents/GitHub/ConcurrencyOpenCL/CClab3/CClab3/samples/turing_js_r.rle");
+            StreamReader sr = new StreamReader("../../samples/turing_js_r.rle");
             uint state = 0, n = 0, x = 0, y = 0;
             while (true)
             {
@@ -80,23 +80,15 @@ namespace Template
             kernel.SetArgument(3, ph);
             kernel.SetArgument(4, breedte); 
 
-            BitSet(20, 20);
-            BitSet(21, 20);
-            BitSet(22, 20);
-            BitSet(20, 21);
-            BitSet(21, 22);
             //informatie doorgeven naar de GPU - hele dure operatie. Je kan gaan files loaden op de GPU
             //Kopier de begin state één keer naar de GPU en daarna ga je de array's aanpassen. 
         }
-
 
         public void Tick()
         {
             // start timer
             timer.Restart();
             // run the simulation, 1 step
-            
-
             inBuffer.CopyToDevice();
             kernel.Execute(workSize);
             outBuffer.CopyFromDevice();
@@ -117,8 +109,7 @@ namespace Template
                         
                     }
 
-            uint w = pw * 32, h = ph;
-            for (uint y = 0; y < h; y++) for (uint x = 0; x < w; x++)
+            for (uint y = 0; y < ph; y++) for (uint x = 0; x < pw * 32; x++)
                 {
                     if (GetBit(x, y) == 1)
                         BitSet(x, y);
@@ -162,17 +153,6 @@ namespace Template
                 }
             }
             else lastLButtonState = false;
-        }
-
-        //hij moet de scoller van de mouse meenemen
-        //Console venster gaat niet veranderen, maar de inhoud word groter
-        //maar een pixel blijft een pixel natuurlijk...
-        //--> Template.cs staat de input handler.
-        //Mouse positie geeft aan waarop je uiteindelijk moet inzoomen natuurlijk
-        public void Zoom(int scrolling)
-        {
-
-
         }
     } // class Game
 } // namespace Template
