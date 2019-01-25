@@ -39,7 +39,7 @@ namespace Template
 
         public void Init()
         {
-            StreamReader sr = new StreamReader("C:/Users/Alijt Rijcken/Documents/GitHub/ConcurrencyOpenCL/CClab3/CClab3/samples/c4-orthogonal.rle");
+            StreamReader sr = new StreamReader("C:/Users/Alijt Rijcken/Documents/GitHub/ConcurrencyOpenCL/CClab3/CClab3/samples/turing_js_r.rle");
             uint state = 0, n = 0, x = 0, y = 0;
             while (true)
             {
@@ -118,7 +118,7 @@ namespace Template
                     }
 
             uint w = pw * 32, h = ph;
-            for (uint y = 1; y < h - 1; y++) for (uint x = 1; x < w - 1; x++)
+            for (uint y = 0; y < h; y++) for (uint x = 0; x < w; x++)
                 {
                     if (GetBit(x, y) == 1)
                         BitSet(x, y);
