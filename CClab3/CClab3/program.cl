@@ -12,6 +12,9 @@ __kernel void device_function(__global uint* _in, __global uint* _out, uint pw, 
 	
 	_out[y * pw + (x >> 5)] = 0; 
 	
+<<<<<<< HEAD
+>>>>>>> parent of 6098407... push baby
+=======
 >>>>>>> parent of 6098407... push baby
 
 	// count active neighbors
