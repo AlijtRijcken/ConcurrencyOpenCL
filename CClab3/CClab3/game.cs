@@ -55,7 +55,7 @@ namespace Template
                     ph = UInt32.Parse(sub[3]);
                     _in = new uint[pw * ph];
                     _out = new uint[pw * ph];
-                    workSize[0] = breedte;
+                    workSize[0] = pw * 32;
                     workSize[1] = ph;
                 }
                 else while (pos < line.Length)
@@ -78,9 +78,7 @@ namespace Template
             kernel.SetArgument(1, outBuffer);
             kernel.SetArgument(2, pw);
             kernel.SetArgument(3, ph);
-            kernel.SetArgument(4, breedte);
-
-            //Console.ReadLine();
+            kernel.SetArgument(4, breedte); 
 
             //informatie doorgeven naar de GPU - hele dure operatie. Je kan gaan files loaden op de GPU
             //Kopier de begin state één keer naar de GPU en daarna ga je de array's aanpassen. 
@@ -108,10 +106,10 @@ namespace Template
                     if (GetBit(x + xoffset, y + yoffset) == 1)
                     {
                         screen.Plot(x, y, 0xffffff);
+                        
                     }
 
-            for (uint y = 0; y < ph; y++)
-                for (uint x = 0; x < pw * 32; x++)
+            for (uint y = 0; y < ph; y++) for (uint x = 0; x < pw * 32; x++)
                 {
                     if (GetBit(x, y) == 1)
                         BitSet(x, y);
