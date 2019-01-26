@@ -55,7 +55,7 @@ namespace Template
                     ph = UInt32.Parse(sub[3]);
                     _in = new uint[pw * ph];
                     _out = new uint[pw * ph];
-                    workSize[0] = pw * 32;
+                    workSize[0] = breedte;
                     workSize[1] = ph;
                 }
                 else while (pos < line.Length)
@@ -74,13 +74,13 @@ namespace Template
             inBuffer = new OpenCLBuffer<uint>(ocl, _in);
             outBuffer = new OpenCLBuffer<uint>(ocl, _out);
 
-            Console.WriteLine(_out.Length);
-
             kernel.SetArgument(0, inBuffer);
             kernel.SetArgument(1, outBuffer);
             kernel.SetArgument(2, pw);
             kernel.SetArgument(3, ph);
-            kernel.SetArgument(4, breedte); 
+            kernel.SetArgument(4, breedte);
+
+            //Console.ReadLine();
 
             //informatie doorgeven naar de GPU - hele dure operatie. Je kan gaan files loaden op de GPU
             //Kopier de begin state één keer naar de GPU en daarna ga je de array's aanpassen. 
@@ -108,10 +108,10 @@ namespace Template
                     if (GetBit(x + xoffset, y + yoffset) == 1)
                     {
                         screen.Plot(x, y, 0xffffff);
-                        
                     }
 
-            for (uint y = 0; y < ph; y++) for (uint x = 0; x < pw * 32; x++)
+            for (uint y = 0; y < ph; y++)
+                for (uint x = 0; x < pw * 32; x++)
                 {
                     if (GetBit(x, y) == 1)
                         BitSet(x, y);
@@ -119,7 +119,7 @@ namespace Template
 
 
             // report performance
-            //Console.WriteLine("generation " + generation++ + ": " + timer.ElapsedMilliseconds + "ms");
+            Console.WriteLine("generation " + generation++ + ": " + timer.ElapsedMilliseconds + "ms");
         }
 
         // helper function for setting one bit in the pattern buffer
