@@ -70,7 +70,7 @@ namespace Template
             //mouse drag function handling, p.X & p.Y are the current mouse positions. 
             game.SetMouseState(p.X, p.Y, mouse.LeftButton == ButtonState.Pressed);
             //mouse zoom function, work with the mouse.Scroll
-            //game.Zoom(mouse.ScrollWheelValue);        /////////////////////////////////////////////////////////////////////////////////////
+            game.Zoom(mouse.ScrollWheelValue);        /////////////////////////////////////////////////////////////////////////////////////
 
         }
         protected override void OnRenderFrame(FrameEventArgs e)

@@ -6,7 +6,13 @@ __kernel void device_function(__global uint* _in, __global uint* _out, uint pw, 
 	uint y = get_global_id(1);
 	
 	//aparte kernel voor de rand? en een aparte voor het midden
+<<<<<<< HEAD
 	_out[y * pw + (x >> 5)] = 0; 
+=======
+	
+	_out[y * pw + (x >> 5)] = 0; 
+	
+>>>>>>> parent of 6098407... push baby
 
 	// count active neighbors
 	uint n = GetBit(((x + breedte - 1)% breedte), ((y + ph - 1) % ph), pw, _in) + GetBit(x, ((y + ph - 1) % ph), pw, _in) + GetBit(((x + breedte + 1) % breedte), ((y + ph - 1) % ph), pw, _in) + GetBit(((x + breedte - 1) % breedte), y, pw, _in) +
