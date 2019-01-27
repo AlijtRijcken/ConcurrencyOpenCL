@@ -30,6 +30,7 @@ namespace Template
         static uint[] _out;
         uint pw, ph, breedte; // note: pw is in uints; width in bits is 32 this value.
         long[] workSize = { 0, 0 };
+        static uint scale = 3;
 
         // mouse handling: dragging functionality
         uint xoffset = 0, yoffset = 0;
@@ -55,7 +56,7 @@ namespace Template
                     ph = UInt32.Parse(sub[3]);
                     _in = new uint[pw * ph];
                     _out = new uint[pw * ph];
-                    workSize[0] = pw * 32;
+                    workSize[0] = breedte;
                     workSize[1] = ph;
                 }
                 else while (pos < line.Length)
@@ -101,15 +102,20 @@ namespace Template
 
             // visualize current state, DRAW FUNCTION -> GPU BONUS. 
             screen.Clear(0);
-            for (uint y = 0; y < screen.height; y++)
-                for (uint x = 0; x < screen.width; x++)
+            for (uint y = 0; y < screen.height / scale; y++)
+                for (uint x = 0; x < screen.width / scale; x++)
                     if (GetBit(x + xoffset, y + yoffset) == 1)
-                    {
-                        screen.Plot(x, y, 0xffffff);
-                        
-                    }
+                        if (scale > 1)
+                        {
+                            for (uint j = 0; ((j + 1) % scale) != 0; j++)
+                                for (uint i = 0; ((i + 1) % scale) != 0; i++)
+                                    screen.Plot((x * scale + i), (y * scale + j), 0xffffff);
+                        }
+                        else
+                            screen.Plot(x, y, 0xffffff);
 
-            for (uint y = 0; y < ph; y++) for (uint x = 0; x < pw * 32; x++)
+            for (uint y = 0; y < ph; y++)
+                for (uint x = 0; x < breedte; x++)
                 {
                     if (GetBit(x, y) == 1)
                         BitSet(x, y);
