@@ -30,7 +30,8 @@ namespace Template
         static uint[] _out;
         uint pw, ph, breedte; // note: pw is in uints; width in bits is 32 this value.
         long[] workSize = { 0, 0 };
-        static uint scale = 3;
+        public uint scale = 1;
+        public int mouseWheelValue;
 
         // mouse handling: dragging functionality
         uint xoffset = 0, yoffset = 0;
@@ -56,7 +57,7 @@ namespace Template
                     ph = UInt32.Parse(sub[3]);
                     _in = new uint[pw * ph];
                     _out = new uint[pw * ph];
-                    workSize[0] = breedte;
+                    workSize[0] = pw * 32;
                     workSize[1] = ph;
                 }
                 else while (pos < line.Length)
@@ -115,12 +116,15 @@ namespace Template
                             screen.Plot(x, y, 0xffffff);
 
             for (uint y = 0; y < ph; y++)
-                for (uint x = 0; x < breedte; x++)
+                for (uint x = 0; x < pw * 32; x++)
                 {
                     if (GetBit(x, y) == 1)
                         BitSet(x, y);
                 }
 
+
+            string text ="Mousewheel value: " + mouseWheelValue + "; Scale: " + scale + "x";
+            screen.Print(text, 5, 5, 0xffffff);
 
             // report performance
             Console.WriteLine("generation " + generation++ + ": " + timer.ElapsedMilliseconds + "ms");
@@ -137,7 +141,6 @@ namespace Template
             return (_out[y * pw + (x >> 5)] >> (int)(x & 31)) & 1U;
         }
 
-        //COPYED FROM CPU VERSION
         //handles mouse movement
         public void SetMouseState(int x, int y, bool pressed)
         {
