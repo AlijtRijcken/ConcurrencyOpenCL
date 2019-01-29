@@ -32,6 +32,7 @@ namespace Template
         long[] workSize = { 0, 0 };
         public uint scale = 1;
         public int mouseWheelValue;
+        int Wrap = 0;
 
         // mouse handling: dragging functionality
         uint xoffset = 0, yoffset = 0;
@@ -41,6 +42,14 @@ namespace Template
 
         public void Init()
         {
+            Console.WriteLine("To turn Wrap on, press y and enter, to turn Wrap off, press n and enter.");
+            Console.WriteLine("If an incorrect input is pressed Wrap will be off at default.");
+            string input = Console.ReadLine();
+            if (input == "y")
+                Wrap = 1;
+            if (input == "n")
+                Wrap = 0;
+
             StreamReader sr = new StreamReader("../../samples/turing_js_r.rle");
             uint state = 0, n = 0, x = 0, y = 0;
             while (true)
@@ -80,7 +89,14 @@ namespace Template
             kernel.SetArgument(1, outBuffer);
             kernel.SetArgument(2, pw);
             kernel.SetArgument(3, ph);
-            kernel.SetArgument(4, breedte); 
+            kernel.SetArgument(4, breedte);
+            kernel.SetArgument(5, Wrap);
+
+            //BitSet(20, 20);
+            //BitSet(21, 20);
+            //BitSet(22, 20);
+            //BitSet(20, 21);
+            //BitSet(21, 22);
 
             //informatie doorgeven naar de GPU - hele dure operatie. Je kan gaan files loaden op de GPU
             //Kopier de begin state één keer naar de GPU en daarna ga je de array's aanpassen. 
