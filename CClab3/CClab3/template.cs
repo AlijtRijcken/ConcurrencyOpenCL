@@ -33,6 +33,7 @@ namespace Template
         static int screenID, mousex, mousey;
         static bool mouseLButton = false;
         static Game game;
+        int mouseWheelValue = 0;
         protected override void OnLoad(EventArgs e)
         {
             // called upon app init
@@ -70,10 +71,18 @@ namespace Template
             //mouse drag function handling, p.X & p.Y are the current mouse positions. 
             game.SetMouseState(p.X, p.Y, mouse.LeftButton == ButtonState.Pressed);
             //mouse zoom function, work with the mouse.Scroll
-            string text = "mouse wheel value: " + mouse.Wheel;
-            game.mouseWheelValue = mouse.Wheel;
-            if (mouse.Wheel >= 1 && mouse.Wheel <= 8)
-                game.scale = (uint)mouse.Wheel;
+            if (mouse.Wheel - mouseWheelValue >= 1)
+            {
+                mouseWheelValue = mouse.Wheel;
+                if (game.scale < 8)
+                    game.scale++;
+            }
+            if (mouse.Wheel - mouseWheelValue <= -1)
+            {
+                mouseWheelValue = mouse.Wheel;
+                if (game.scale > 1)
+                    game.scale--;
+            }
         }
         protected override void OnRenderFrame(FrameEventArgs e)
         {

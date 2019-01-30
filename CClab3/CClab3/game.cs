@@ -31,7 +31,6 @@ namespace Template
         uint pw, ph, breedte; // note: pw is in uints; width in bits is 32 this value.
         long[] workSize = { 0, 0 };
         public uint scale = 1;
-        public int mouseWheelValue;
         int Wrap = 0;
 
         // mouse handling: dragging functionality
@@ -66,7 +65,7 @@ namespace Template
                     ph = UInt32.Parse(sub[3]);
                     _in = new uint[pw * ph];
                     _out = new uint[pw * ph];
-                    workSize[0] = pw * 32;
+                    workSize[0] = pw * 32; //breedte;
                     workSize[1] = ph;
                 }
                 else while (pos < line.Length)
@@ -139,7 +138,7 @@ namespace Template
                 }
 
 
-            string text ="Mousewheel value: " + mouseWheelValue + "; Scale: " + scale + "x";
+            string text ="Scale: " + scale + "x";
             screen.Print(text, 5, 5, 0xffffff);
 
             // report performance
